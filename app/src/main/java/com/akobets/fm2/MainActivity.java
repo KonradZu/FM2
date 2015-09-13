@@ -1,17 +1,12 @@
 package com.akobets.fm2;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,33 +55,7 @@ public class MainActivity extends Activity {
             TextView titleManager = (TextView) findViewById(R.id.tvTitleManager);
             titleManager.setText(aDirectory.getAbsolutePath());
         }
-//        else {
-//            //if we want to open file, show this dialog:
-//            //listener when YES button clicked
-//            DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface arg0, int arg1) {
-//                    //intent to navigate file
-//                    Intent i = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("file://" + aDirectory.getAbsolutePath()));
-//                    //start this activity
-//                    startActivity(i);
-//                }
-//            };
-//            //listener when NO button clicked
-//            DialogInterface.OnClickListener cancelButtonListener = new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface arg0, int arg1) {
-//                    //do nothing
-//                    //or add something you want
-//                }
-//            };
-//
-//            //create dialog
-//            new AlertDialog.Builder(this)
-//                    .setTitle("Подтверждение") //title
-//                    .setMessage("Хотите открыть файл " + aDirectory.getName() + "?") //message
-//                    .setPositiveButton("Да", okButtonListener) //positive button
-//                    .setNegativeButton("Нет", cancelButtonListener) //negative button
-//                    .show(); //show dialog
-//        }
+
     }
 
     //fill list
@@ -108,7 +77,7 @@ public class MainActivity extends Activity {
 
         //create array adapter to show everything
         lvFileManager = (ListView) findViewById(R.id.lvFileManager);
-        fileListAdapter = new FileListAdapter(this, R.layout.row, filesByFolder);
+        fileListAdapter = new FileListAdapter(this, R.layout.row_file_manager, filesByFolder);
         lvFileManager.setAdapter(fileListAdapter);
 
         lvFileManager.setOnItemClickListener(new AdapterView.OnItemClickListener() {

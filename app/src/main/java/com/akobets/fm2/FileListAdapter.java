@@ -40,7 +40,7 @@ public class FileListAdapter extends ArrayAdapter<File> {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Log.d("MyLog", "resource = " + resource);
-        Log.d("MyLog", "R.layout.row = " + R.layout.row);
+        Log.d("MyLog", "R.layout.row_file_manager = " + R.layout.row_file_manager);
         View view = inflater.inflate(resource, parent, false);
 
         // Связываем поля и графические элементы
