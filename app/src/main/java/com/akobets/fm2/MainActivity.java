@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class MainActivity extends Activity {
 
     private ArrayList<File> filesByFolder = new ArrayList<>();
-    private File currentDirectory = new File("/");
+    private File currentDirectory = new File("sdcard/download");
     private FileListAdapter fileListAdapter;
     private File fileLevelUp = new File(FileListAdapter.LEVEL_UP);
 
