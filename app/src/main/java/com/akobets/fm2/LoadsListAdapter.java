@@ -59,59 +59,86 @@ public class LoadsListAdapter extends ArrayAdapter<File> {
 
         // устанавливаем значения компонентам одного элемента списка
         //иконка по типу файла
-        switch (currentFile.getName().substring(currentFile.getName().lastIndexOf("."))) {
-            case ".pdf":
-                ivIconFileType.setImageResource(R.drawable.pdf);
-                break;
-            case ".jpg":
-                ivIconFileType.setImageResource(R.drawable.jpg);
-                break;
-            case ".mp3":
-                ivIconFileType.setImageResource(R.drawable.mp3);
-                break;
-            case ".xls":
-                ivIconFileType.setImageResource(R.drawable.xls);
-                break;
-            default:
-                ivIconFileType.setImageResource(R.drawable.file);
-        }
+        ivIconFileType.setImageResource(getImageByExt(currentFile));
+//        switch (currentFile.getName().substring(currentFile.getName().lastIndexOf("."))) {
+//            case ".pdf":
+//                ivIconFileType.setImageResource(R.drawable.pdf);
+//                break;
+//            case ".jpg":
+//                ivIconFileType.setImageResource(R.drawable.jpg);
+//                break;
+//            case ".mp3":
+//                ivIconFileType.setImageResource(R.drawable.mp3);
+//                break;
+//            case ".xls":
+//                ivIconFileType.setImageResource(R.drawable.xls);
+//                break;
+//            default:
+//                ivIconFileType.setImageResource(R.drawable.file);
+//        }
 
         //параметры файла:
+//        Log.d("MyLog", "currentFile.getName() = "+ currentFile.getName());
+//        Log.d("MyLog", "currentFile.getParent() = "+ currentFile.getParent());
+//        Log.d("MyLog", "currentFile.length() = " + currentFile.length());
+//        Log.d("MyLog", "currentFile.lastModified() = "+ currentFile.lastModified());
         tvLoadName.setText(currentFile.getName());
-        tvLoadPath.setText(currentFile.getAbsolutePath());
+        tvLoadPath.setText(currentFile.getParent());
         tvLoadSize.setText(fileSizeToString(currentFile.length()));
         tvDateLastModif.setText(dateModifToString(currentFile.lastModified()));
 
         return view;
     }
 
+    public static int getImageByExt(File file) {
+        int resourceID;
+        switch (file.getName().substring(file.getName().lastIndexOf("."))) {
+            case ".pdf":
+                resourceID = R.drawable.pdf;
+                break;
+            case ".jpg":
+                resourceID = R.drawable.jpg;
+                break;
+            case ".mp3":
+                resourceID = R.drawable.mp3;
+                break;
+            case ".xls":
+                resourceID = R.drawable.xls;
+                break;
+            default:
+                resourceID = R.drawable.file;
+        }
+        return resourceID;
+    }
 
-    public String fileSizeToString(long fileSize) {
+
+    public static String fileSizeToString(long fileSize) {
         String result;
+        float fileSizeFloat = fileSize;
         if (fileSize < 1024) {
             result = String.valueOf(fileSize) + " B";
         } else {
             if (fileSize < Math.pow(1024, 2)) {
-                fileSize = (long) ((int) ((fileSize / 1024) * 100)) / 100;
-                result = String.valueOf(fileSize) + " KB";
+                fileSizeFloat = ((float) ((int) ((fileSizeFloat / 1024) * 100))) / 100;
+                result = String.valueOf(fileSizeFloat) + " KB";
             } else {
                 if (fileSize < Math.pow(1024, 3)) {
-                    fileSize = (long) ((int) ((fileSize / Math.pow(1024, 2)) * 100)) / 100;
-                    result = String.valueOf(fileSize) + " MB";
+                    fileSizeFloat = ((float) ((int) ((fileSizeFloat / Math.pow(1024, 2)) * 100))) / 100;
+                    result = String.valueOf(fileSizeFloat) + " MB";
                 } else {
-                    fileSize = (long) ((int) ((fileSize / Math.pow(1024, 3)) * 100)) / 100;
-                    result = String.valueOf(fileSize) + " GB";
+                    fileSizeFloat = ((float) ((int) ((fileSizeFloat / Math.pow(1024, 3)) * 100))) / 100;
+                    result = String.valueOf(fileSizeFloat) + " GB";
                 }
             }
         }
         return result;
     }
 
-    public String dateModifToString (long time){
+    public static String dateModifToString(long time) {
         String result;
         Calendar dating = Calendar.getInstance();
         dating.setTimeInMillis(time);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:YYYY");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:yyyy");
         result = String.valueOf(sdf.format(dating.getTime()));
         return result;
     }

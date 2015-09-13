@@ -59,7 +59,7 @@ public class FileListAdapter extends ArrayAdapter<File> {
             if (currentFile.isDirectory()) {
                 ivFileIcon.setImageResource(R.drawable.folder);
             } else {
-                ivFileIcon.setImageResource(R.drawable.file);
+                ivFileIcon.setImageResource(LoadsListAdapter.getImageByExt(currentFile));
             }
             tvFileName.setText(currentFile.getName());
         }

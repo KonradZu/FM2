@@ -19,8 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".FileManager"
+            android:label="@string/activity_file_manager">
+        </activity>
+
     </application>
 
 </manifest>
-    <!--android:name=".MainActivity"-->
+    <!--android:name=".FileManager"-->
     <!--android:name=".Loader"-->

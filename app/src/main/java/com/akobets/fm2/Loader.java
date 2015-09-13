@@ -13,15 +13,18 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +34,7 @@ public class Loader extends Activity {
     public static final String FILE_URL = "http://www.renault.ua/media/brochures/att00452579/Fluence_ebrochure.pdf";
     public static final String FILE_PATH = "/sdcard/download";
     public static final int ID_SAVE_FILE = 0;
+    public static final String TRANSFER_DATA = "Путь и имя файла";
 
 
     private Button bDownload;
@@ -38,8 +42,9 @@ public class Loader extends Activity {
     private ProgressBar pbDownloadProgress;
     private TextView tvDigitProgress;
 
-
-    private ArrayList<File> downloadedFiles = new ArrayList<>();
+    private ListView lvLoadHistory;
+    private ArrayList<File> loadedFiles = new ArrayList<>();
+    private LoadsListAdapter loadsListAdapter;
 
     private String currentFileURL = "empty";
     private String currentFilePath = "sdcard/download";
@@ -49,13 +54,14 @@ public class Loader extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_download);
+        setContentView(R.layout.activity_loader);
 
         etUrl = (EditText) findViewById(R.id.etUrl);
         bDownload = (Button) findViewById(R.id.bDownload);
         pbDownloadProgress = (ProgressBar) findViewById(R.id.pbDownloadProgress);
         tvDigitProgress = (TextView) findViewById(R.id.tvDigitProgress);
 
+        bDownload.requestFocus();
         bDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,18 +77,29 @@ public class Loader extends Activity {
 //                bundle.putInt("position", position);
 //                Log.d("MyLog", "position " + position + " name " + contactList.get(position).getContact());
 //                showDialog(ID_SAVE_FILE, bundle);
-
-
                 showDialog(ID_SAVE_FILE);
 
-
-//                downloadFile(FILE_URL);
             }
         });
 
+        initLoadedFiles();
+        lvLoadHistory = (ListView) findViewById(R.id.lvLoadHistory);
+        loadsListAdapter = new LoadsListAdapter(this, R.layout.row_load_history, loadedFiles);
+        lvLoadHistory.setAdapter(loadsListAdapter);
 
-//        setContentView(load, new LayoutParams(LayoutParams.WRAP_CONTENT,
-//                LayoutParams.WRAP_CONTENT));
+        lvLoadHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                String transferData = loadedFiles.get(position).getParent();
+
+                Intent intent = new Intent(getApplicationContext(), FileManager.class);
+                intent.putExtra(TRANSFER_DATA, transferData);
+                startActivity(intent);
+
+            }
+        });
 
     }
 
@@ -163,7 +180,7 @@ public class Loader extends Activity {
             @Override
             protected void onProgressUpdate(Integer... values) {
                 pbDownloadProgress.setProgress((int) ((values[0] / (float) values[1]) * 100));
-                tvDigitProgress.setText(String.valueOf((int)((values[0] / (float) values[1]) * 100)) + "%");
+                tvDigitProgress.setText(String.valueOf((int) ((values[0] / (float) values[1]) * 100)) + "%");
             }
 
             @Override
@@ -173,7 +190,8 @@ public class Loader extends Activity {
                     m_error.printStackTrace();
                     return;
                 }
-
+                loadedFiles.add(file);
+                loadsListAdapter.notifyDataSetChanged();
             }
         }.execute(url, path, name);
 
@@ -248,34 +266,9 @@ public class Loader extends Activity {
         return builder.create();
     }
 
-    public String getCurrentFileURL() {
-        return currentFileURL;
-    }
-
-    public void setCurrentFileURL(String currentFileURL) {
-        this.currentFileURL = currentFileURL;
-    }
-
-    public String getCurrentFilePath() {
-        return currentFilePath;
-    }
-
-    public void setCurrentFilePath(String currentFilePath) {
-        this.currentFilePath = currentFilePath;
-    }
-
-    public String getCurrentFileName() {
-        return currentFileName;
-    }
-
-    public void setCurrentFileName(String currentFileName) {
-        this.currentFileName = currentFileName;
-    }
-
 
     public String fileNameFromUrl(String url, int mode) {
         String result = "";
-//        Log.d("MyLog", "url = " + url);
         String fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
         String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf("."));
         String fileExtension = url.substring(url.lastIndexOf("."));
@@ -291,6 +284,14 @@ public class Loader extends Activity {
                 break;
         }
         return result;
+    }
+
+    public void initLoadedFiles() {
+        loadedFiles.add(new File("/sdcard/Books", "vlastsily.fb2"));
+        loadedFiles.add(new File("/sdcard/Books", "Радиус поражения.fb2"));
+        loadedFiles.add(new File("/sdcard/Music", "04_sova.mp3"));
+        loadedFiles.add(new File("/sdcard/Music/Океаны", "02 911.mp3"));
+        loadedFiles.add(new File("/sdcard/DCIM/Camera", "IMG_20140304_120910.jpg"));
     }
 
 

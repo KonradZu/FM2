@@ -1,12 +1,14 @@
 package com.akobets.fm2;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity {
+public class FileManager extends Activity {
 
     private ArrayList<File> filesByFolder = new ArrayList<>();
     private File currentDirectory = new File("sdcard/download");
@@ -25,14 +27,28 @@ public class MainActivity extends Activity {
 
     private TextView titleManager;
     private ListView lvFileManager;
+    private Button bBackToLoader;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_file_manager);
 
-        browseTo(currentDirectory);
+
+        Intent intent = getIntent();
+//        String receivedData;
+//        receivedData = intent.getStringExtra(Loader.TRANSFER_DATA);
+//        browseTo(new File(receivedData));
+        browseTo(new File(intent.getStringExtra(Loader.TRANSFER_DATA)));
+
+        bBackToLoader = (Button) findViewById(R.id.bBackToLoader);
+        bBackToLoader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     //browse to parent directory
@@ -66,15 +82,11 @@ public class MainActivity extends Activity {
         if (currentDirectory.getParent() != null) {
             filesByFolder.add(fileLevelUp);
         }
-
-
-            //add every file into list
-            for (File f : files) {
-                filesByFolder.add(f);
-                Log.d("MyLog", "" + filesByFolder.size());
-            }
-
-
+        //add every file into list
+        for (File f : files) {
+            filesByFolder.add(f);
+            Log.d("MyLog", "" + filesByFolder.size());
+        }
         //create array adapter to show everything
         lvFileManager = (ListView) findViewById(R.id.lvFileManager);
         fileListAdapter = new FileListAdapter(this, R.layout.row_file_manager, filesByFolder);
@@ -97,26 +109,6 @@ public class MainActivity extends Activity {
             }
         });
     }
-
-//    //when you clicked onto item
-//    @Override
-//    protected void onListItemClick(ListView l, View v, int position, long id) {
-//        //get selected file name
-//        int selectionRowID = position;
-//        String selectedFileString = this.filesByFolder.get(selectionRowID);
-//
-//        //if we select ".." then go upper
-//        if (selectedFileString.equals("..")) {
-//            this.upOneLevel();
-//        } else {
-//            //browse to clicked file or directory using browseTo()
-//            File clickedFile = null;
-//            clickedFile = new File(selectedFileString);
-//            if (clickedFile != null)
-//                this.browseTo(clickedFile);
-//        }
-//    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

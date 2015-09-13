@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/ivIconFileType"
-        android:layout_weight="1"
+        android:layout_weight="0"
         android:src="@drawable/pdf"
         android:padding="2dp" />
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:layout_weight="3">
 
         <TextView
@@ -22,7 +22,7 @@
             android:layout_height="0dp"
             android:text="Renault.pdf"
             android:id="@+id/tvLoadName"
-            android:textSize="16dp"
+            android:textSize="12dp"
             android:padding="2dp"
             android:layout_weight="1" />
 
@@ -31,7 +31,7 @@
             android:layout_height="0dp"
             android:text="/sdcard/download"
             android:id="@+id/tvLoadPath"
-            android:textSize="16dp"
+            android:textSize="12dp"
             android:padding="2dp"
             android:layout_weight="1" />
 
@@ -42,20 +42,20 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="1000.77 KB"
                 android:id="@+id/tvLoadSize"
                 android:layout_weight="1"
-                android:textSize="16dp"
+                android:textSize="12dp"
                 android:padding="2dp" />
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="20.08.2015"
                 android:id="@+id/tvDateLastModif"
                 android:layout_weight="1"
-                android:textSize="16dp"
+                android:textSize="12dp"
                 android:padding="2dp" />
         </TableRow>
     </LinearLayout>
